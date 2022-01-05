@@ -1,0 +1,41 @@
+version: "3.9"
+
+networks:
+  university-network:
+    driver: bridge
+
+services:
+  university-postgres:
+    image: postgres:14.1
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=university_db
+    ports:
+      - "5432:5432"
+    volumes:
+    - ./create_university_db.sh:/docker-entrypoint-initdb.d/create_university_db.sh
+    networks:
+      - university-network    
+
+  # address-api:
+  #   build: ./ms-address
+  #   environment:
+  #     DB_HOST: university-postgres
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - university-network
+  #   depends_on:
+  #     - university-postgres
+
+  # student-api:
+  #   build: ./ms-student
+  #   environment:
+  #     DB_HOST: university-postgres
+  #   ports:
+  #     - "8081:8081"
+  #   networks:
+  #     - university-network
+  #   depends_on:
+  #     - university-postgres
